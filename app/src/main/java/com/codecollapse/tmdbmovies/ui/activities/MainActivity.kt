@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.codecollapse.tmdbmovies.R
 import com.codecollapse.tmdbmovies.common.CommonFunctions.launchActivity
+import com.codecollapse.tmdbmovies.databinding.ActivityMainBinding
 import com.codecollapse.tmdbmovies.models.adapter.MoviesAdapter
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 import com.codecollapse.tmdbmovies.models.datasources.utils.Status
@@ -23,13 +24,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
+    private lateinit var binding: ActivityMainBinding
     private val startupViewModel: StartupViewModel by viewModels()
     lateinit var moviesAdapter: MoviesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        moviesRecyclerView.let { recyclerView ->
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.moviesRecyclerView.let { recyclerView ->
             moviesAdapter = MoviesAdapter(this)
             recyclerView.layoutManager =
                 GridLayoutManager(this, 1, LinearLayoutManager.VERTICAL, false)
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         Status.SUCCESS -> {
                             if (!it.data.isNullOrEmpty()) {
-                                moviesAdapter.submitData(it.data as ArrayList<TMDBMovies.Results>)
+                                moviesAdapter.submitList(it.data as ArrayList<TMDBMovies.Results>)
                                 Log.d(TAG, "Success: ${it.data?.get(0)?.overview}")
                             }
 

@@ -2,68 +2,59 @@ package com.codecollapse.tmdbmovies.models.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.codecollapse.tmdbmovies.R
 import com.codecollapse.tmdbmovies.common.AppConstants
+import com.codecollapse.tmdbmovies.databinding.MoviesLayoutBinding
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 
-class MoviesAdapter(mContext : Context)  :
-    RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
-
-
-    private var TAG = "MoviesAdapter"
-
-    private var movieList = ArrayList<TMDBMovies.Results>()
-    var selectedMovie = MutableLiveData<TMDBMovies.Results>()
+class MoviesAdapter(mContext :Context) : ListAdapter<TMDBMovies.Results, MoviesAdapter.MyViewHolder>(CHARACTER_COMPARATOR) {
     var context = mContext
-
-
-    fun submitData(_movieList: ArrayList<TMDBMovies.Results>) {
-        movieList = _movieList
-        notifyDataSetChanged()
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var textViewMovieName = itemView.findViewById<TextView>(R.id.textViewMovieName)!!
-        var imageViewMovieCover = itemView.findViewById<ImageView>(R.id.imageViewMovieCover)!!
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
-        val inflater = LayoutInflater.from(context)
-        // Inflate the custom layout
-        val contactView = inflater.inflate(R.layout.movies_layout, parent, false)
-        // Return a new holder instance
-        return ViewHolder(contactView)
-    }
-
-    override fun getItemCount(): Int {
-        if (movieList.size > 0) {
-            return movieList.size
+    var selectedMovie = MutableLiveData<TMDBMovies.Results>()
+    inner class MyViewHolder(private val binding: MoviesLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(response: TMDBMovies.Results?) {
+            var path = AppConstants.LOAD_BACK_DROP_BASE_URL + response?.backdrop_path
+            binding.textViewMovieName.text = response?.title
+            Glide
+                .with(context)
+                .load(path)
+                .centerCrop()
+                .into(binding.imageViewMovieCover)
+            binding.imageViewMovieCover.setOnClickListener {
+                selectedMovie.postValue(response!!)
+            }
         }
-        return 0
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        return MyViewHolder(
+            MoviesLayoutBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
 
-        var movie = movieList[position]
-        var path = AppConstants.LOAD_BACK_DROP_BASE_URL + movie.backdrop_path
-        Glide
-            .with(context)
-            .load(path)
-            .centerCrop()
-            .into(holder.imageViewMovieCover)
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val character = getItem(position)
+        holder.bind(character)
+    }
 
-        holder.textViewMovieName.text = movie.title
-        holder.imageViewMovieCover.setOnClickListener {
-            selectedMovie.postValue(movie)
+    companion object {
+        private val CHARACTER_COMPARATOR = object : DiffUtil.ItemCallback<TMDBMovies.Results>() {
+            override fun areItemsTheSame(oldItem: TMDBMovies.Results, newItem: TMDBMovies.Results): Boolean {
+                return oldItem.title == newItem.title
+            }
+
+            override fun areContentsTheSame(oldItem: TMDBMovies.Results, newItem: TMDBMovies.Results): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }
