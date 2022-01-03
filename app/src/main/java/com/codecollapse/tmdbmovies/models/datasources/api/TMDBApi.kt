@@ -22,7 +22,8 @@ interface TMDBApi {
     suspend fun getMovieDetails(
         @Path("movie_id") movieId : Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("append_to_response") videos : String
     ): Response<MovieDetail>
 
     /*@GET("movie/{movie_id}/credits")

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_baseline_schedule_24"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewRating"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/app_primary_color"></ImageView>
+
+    <TextView
+        android:id="@+id/textViewDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="1h 20m"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewTime"
+        app:layout_constraintStart_toStartOf="@+id/imageViewTime"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewTime"></TextView>
+
+    <ImageView
+        android:id="@+id/imageViewRating"
+        android:layout_width="187dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:src="@drawable/ic_baseline_star_24"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewThumbUp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageViewTime"
+        app:layout_constraintTop_toTopOf="@+id/imageViewTime"
+        app:tint="@color/app_primary_color"></ImageView>
+
+    <TextView
+        android:id="@+id/textViewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="8.7/10"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewRating"
+        app:layout_constraintStart_toStartOf="@+id/imageViewRating"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewRating"></TextView>
+
+    <ImageView
+        android:id="@+id/imageViewThumbUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:src="@drawable/ic_baseline_thumb_up_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageViewRating"
+        app:layout_constraintTop_toTopOf="@+id/imageViewRating"
+        app:tint="@color/app_primary_color"></ImageView>
+
+    <TextView
+        android:id="@+id/textViewThumbUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="12435"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewThumbUp"
+        app:layout_constraintStart_toStartOf="@+id/imageViewThumbUp"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewThumbUp"></TextView>
+</androidx.constraintlayout.widget.ConstraintLayout>

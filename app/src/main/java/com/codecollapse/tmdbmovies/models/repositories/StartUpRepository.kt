@@ -102,7 +102,7 @@ class StartUpRepository @Inject constructor(
         return flow {
             try {
                 emit(Resource.success(movieDetailDao.getTMDBMovieById(movieId)))
-                tmdbApi.getMovieDetails(movieId,AppConstants.API_KEY, movieLanguage).let {
+                tmdbApi.getMovieDetails(movieId,AppConstants.API_KEY, movieLanguage,"videos").let {
                     if (it.isSuccessful) {
                         Log.d(TAG, "getMovieDetails: ${it.body()!!}")
                         movieDetailDao.insertMovie(it.body()!!)
