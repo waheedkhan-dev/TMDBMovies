@@ -55,6 +55,7 @@ data class TMDBMovies(
         @Json(name = "popularity")
         var popularity: Float? = 0f,
         @Json(name = "media_type")
-        var media_type: String? = ""
+        var media_type: String? = "",
+        var movieType : String?=""
     ) {}
 }

@@ -23,17 +23,68 @@ class StartUpRepository @Inject constructor(
         private const val TAG = "StartUpRepository"
     }
 
+    fun getUpComingMovies(): Flow<Resource<List<TMDBMovies.Results>>> {
+        return flow {
+            try {
+                emit(Resource.success(movieDao.getTMDBMovies("upcoming")))
+                tmdbApi.getUpComingMovies(AppConstants.API_KEY).let {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "getTrendingMoviesList: ${it.body()!!.results}")
+                        it.body()!!.results.forEach { movie->
+                            movie.movieType = "upcoming"
+                            movieDao.insertMovies(movie)
+                        }
+                        emit(Resource.success(movieDao.getTMDBMovies("upcoming")))
+                    } else {
+                        emit(Resource.error(it.body()!!.status_message!!, data = null))
+                    }
+                }
+            }
+            catch (ex : Exception){
+                Log.d(TAG, "getMovieDetails: ${ex.message}")
+                emit(Resource.error("something went wrong", data = null))
+            }
+
+        }.flowOn(IO)
+    }
+
     fun getTopRatedMovies(): Flow<Resource<List<TMDBMovies.Results>>> {
         return flow {
             try {
-                emit(Resource.success(movieDao.getTMDBMovies()))
+                emit(Resource.success(movieDao.getTMDBMovies("topRated")))
                 tmdbApi.getTopRatedMovies(AppConstants.API_KEY).let {
                     if (it.isSuccessful) {
                         Log.d(TAG, "getTrendingMoviesList: ${it.body()!!.results}")
                         it.body()!!.results.forEach { movie->
+                            movie.movieType = "topRated"
                             movieDao.insertMovies(movie)
                         }
-                        emit(Resource.success(movieDao.getTMDBMovies()))
+                        emit(Resource.success(movieDao.getTMDBMovies("topRated")))
+                    } else {
+                        emit(Resource.error(it.body()!!.status_message!!, data = null))
+                    }
+                }
+            }
+            catch (ex : Exception){
+                Log.d(TAG, "getMovieDetails: ${ex.message}")
+                emit(Resource.error("something went wrong", data = null))
+            }
+
+        }.flowOn(IO)
+    }
+
+    fun getTrendingMovies(): Flow<Resource<List<TMDBMovies.Results>>> {
+        return flow {
+            try {
+                emit(Resource.success(movieDao.getTMDBMovies("trending")))
+                tmdbApi.getTrendingMovies(AppConstants.API_KEY).let {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "getTrendingMoviesList: ${it.body()!!.results}")
+                        it.body()!!.results.forEach { movie->
+                            movie.movieType = "trending"
+                            movieDao.insertMovies(movie)
+                        }
+                        emit(Resource.success(movieDao.getTMDBMovies("trending")))
                     } else {
                         emit(Resource.error(it.body()!!.status_message!!, data = null))
                     }

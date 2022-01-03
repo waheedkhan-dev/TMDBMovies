@@ -44,7 +44,7 @@ class DetailActivity : AppCompatActivity() {
                                         binding.textViewOverView.text = movieDetail.overview
                                         binding.textViewRating.text = "${movieDetail.vote_average}/10"
                                         movieDetail.genres.forEach { genres->
-                                            textViewGenres.text = genres.name
+                                            binding.textViewGenres.text = genres.name
                                             return@forEach
                                         }
                                     }

@@ -12,8 +12,8 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovies(movie : TMDBMovies.Results)
 
-    @Query("SELECT *FROM movies")
-    fun getTMDBMovies() : List<TMDBMovies.Results>
+    @Query("SELECT *FROM movies where movieType=:movieType order by popularity asc")
+    fun getTMDBMovies(movieType : String) : List<TMDBMovies.Results>
 
     @Query("DELETE FROM movies")
     suspend fun deleteMovies()

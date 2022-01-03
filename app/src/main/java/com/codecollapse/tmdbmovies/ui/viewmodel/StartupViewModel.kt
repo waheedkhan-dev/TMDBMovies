@@ -12,9 +12,15 @@ import javax.inject.Inject
 class StartupViewModel @Inject constructor(private var startUpRepository: StartUpRepository) :
     ViewModel() {
 
+    fun getTrendingMovies() : Flow<Resource<List<TMDBMovies.Results>>> =
+        startUpRepository.getTrendingMovies()
+
     fun getTopRatedMovies(): Flow<Resource<List<TMDBMovies.Results>>> =
         startUpRepository.getTopRatedMovies()
 
     fun getMovieDetails(movieId: Int, movieLanguage: String) =
         startUpRepository.getMovieDetails(movieId, movieLanguage)
+
+    fun getUpComingMovies() : Flow<Resource<List<TMDBMovies.Results>>> =
+        startUpRepository.getUpComingMovies()
 }

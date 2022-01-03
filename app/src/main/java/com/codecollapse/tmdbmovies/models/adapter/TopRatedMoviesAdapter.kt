@@ -12,20 +12,20 @@ import com.codecollapse.tmdbmovies.common.AppConstants
 import com.codecollapse.tmdbmovies.databinding.MoviesLayoutBinding
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 
-class MoviesAdapter(mContext :Context) : ListAdapter<TMDBMovies.Results, MoviesAdapter.MyViewHolder>(CHARACTER_COMPARATOR) {
+class TopRatedMoviesAdapter(mContext :Context) : ListAdapter<TMDBMovies.Results, TopRatedMoviesAdapter.MyViewHolder>(CHARACTER_COMPARATOR) {
     var context = mContext
     var selectedMovie = MutableLiveData<TMDBMovies.Results>()
     inner class MyViewHolder(private val binding: MoviesLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(response: TMDBMovies.Results?) {
-            var path = AppConstants.LOAD_BACK_DROP_BASE_URL + response?.backdrop_path
+            var path = AppConstants.LOAD_IMAGE_BASE_URL + response?.poster_path
             binding.textViewMovieName.text = response?.title
             Glide
                 .with(context)
                 .load(path)
                 .centerCrop()
-                .into(binding.imageViewMovieCover)
-            binding.imageViewMovieCover.setOnClickListener {
+                .into(binding.imageViewMoviePosture)
+            binding.imageViewMoviePosture.setOnClickListener {
                 selectedMovie.postValue(response!!)
             }
         }

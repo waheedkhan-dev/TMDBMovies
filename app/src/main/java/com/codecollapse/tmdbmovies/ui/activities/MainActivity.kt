@@ -10,15 +10,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.codecollapse.tmdbmovies.R
+import com.bumptech.glide.Glide
+import com.codecollapse.tmdbmovies.common.AppConstants
 import com.codecollapse.tmdbmovies.common.CommonFunctions.launchActivity
 import com.codecollapse.tmdbmovies.databinding.ActivityMainBinding
-import com.codecollapse.tmdbmovies.models.adapter.MoviesAdapter
+import com.codecollapse.tmdbmovies.models.adapter.TopRatedMoviesAdapter
+import com.codecollapse.tmdbmovies.models.adapter.TrendingMoviesAdapter
+import com.codecollapse.tmdbmovies.models.adapter.UpComingMoviesAdapter
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 import com.codecollapse.tmdbmovies.models.datasources.utils.Status
 import com.codecollapse.tmdbmovies.ui.viewmodel.StartupViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -26,20 +28,79 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
     private val startupViewModel: StartupViewModel by viewModels()
-    lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var trendingMoviesAdapter: TrendingMoviesAdapter
+    private lateinit var topRatedMoviesAdapter: TopRatedMoviesAdapter
+    private lateinit var upComingMoviesAdapter: UpComingMoviesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.moviesRecyclerView.let { recyclerView ->
-            moviesAdapter = MoviesAdapter(this)
+
+        binding.trendingNowRecyclerView.let { recyclerView ->
+            trendingMoviesAdapter = TrendingMoviesAdapter(this)
             recyclerView.layoutManager =
-                GridLayoutManager(this, 1, LinearLayoutManager.VERTICAL, false)
-            recyclerView.adapter = moviesAdapter
+                GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.adapter = trendingMoviesAdapter
+        }
+
+        binding.topRatedRecyclerView.let { recyclerView ->
+            topRatedMoviesAdapter = TopRatedMoviesAdapter(this)
+            recyclerView.layoutManager =
+                GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.adapter = topRatedMoviesAdapter
+        }
+        binding.upComingRecyclerView.let { recyclerView ->
+            upComingMoviesAdapter = UpComingMoviesAdapter(this)
+            recyclerView.layoutManager =
+                GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.adapter = upComingMoviesAdapter
         }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    startupViewModel.getUpComingMovies().collect{
+                        when (it.status) {
+                            Status.LOADING -> {
+                                Log.d(TAG, "Loading ....: ")
+                            }
+                            Status.SUCCESS -> {
+                                if (!it.data.isNullOrEmpty()) {
+                                    var path = AppConstants.LOAD_BACK_DROP_BASE_URL + it.data[0]!!.poster_path
+                                    Glide.with(this@MainActivity).load(path).into(binding.imageViewCurrent)
+                                    upComingMoviesAdapter.submitList(it.data as  ArrayList<TMDBMovies.Results>)
+                                }
+                            }
+                            Status.ERROR -> {
+                                Log.d(TAG, "Error: ${it.message}")
+                            }
+                        }
+                    }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                startupViewModel.getTrendingMovies().collect {
+                    when (it.status) {
+                        Status.LOADING -> {
+                            Log.d(TAG, "Loading ....: ")
+                        }
+                        Status.SUCCESS -> {
+                            if (!it.data.isNullOrEmpty()) {
+                                trendingMoviesAdapter.submitList(it.data as ArrayList<TMDBMovies.Results>)
+                                Log.d(TAG, "Success: ${it.data?.get(0)?.overview}")
+                            }
+                        }
+                        Status.ERROR -> {
+                            Log.d(TAG, "Error: ${it.message}")
+                        }
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
                 startupViewModel.getTopRatedMovies().collect {
                     when (it.status) {
                         Status.LOADING -> {
@@ -47,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         Status.SUCCESS -> {
                             if (!it.data.isNullOrEmpty()) {
-                                moviesAdapter.submitList(it.data as ArrayList<TMDBMovies.Results>)
+                                topRatedMoviesAdapter.submitList(it.data as ArrayList<TMDBMovies.Results>)
                                 Log.d(TAG, "Success: ${it.data?.get(0)?.overview}")
                             }
 
@@ -60,7 +121,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        moviesAdapter.selectedMovie.observe(this, Observer {
+        trendingMoviesAdapter.selectedMovie.observe(this, Observer {
+            launchActivity<DetailActivity>() {
+                putExtra("movieId", it.id)
+            }
+        })
+
+        topRatedMoviesAdapter.selectedMovie.observe(this, Observer {
+            launchActivity<DetailActivity>() {
+                putExtra("movieId", it.id)
+            }
+        })
+
+        upComingMoviesAdapter.selectedMovie.observe(this, Observer {
             launchActivity<DetailActivity>() {
                 putExtra("movieId", it.id)
             }
