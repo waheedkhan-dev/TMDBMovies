@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="200dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView5"
         android:layout_width="100dp"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:layout_margin="4dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="1dp"
-        app:cardMaxElevation="1dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -51,4 +50,29 @@
         app:layout_constraintEnd_toEndOf="@+id/materialCardView5"
         app:layout_constraintStart_toStartOf="@+id/materialCardView5"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView5"></TextView>
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="1"
+        android:rating="1"
+        android:theme="@style/RatingBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewMovieName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMovieName">
+
+    </RatingBar>
+
+    <TextView
+        android:id="@+id/textViewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="8.5"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+        app:layout_constraintStart_toEndOf="@+id/ratingBar"
+        app:layout_constraintTop_toTopOf="@+id/ratingBar"></TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>

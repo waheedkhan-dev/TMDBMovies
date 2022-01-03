@@ -25,6 +25,7 @@ class TrendingMoviesAdapter(mContext :Context) : ListAdapter<TMDBMovies.Results,
                 .load(path)
                 .centerCrop()
                 .into(binding.imageViewMoviePosture)
+            binding.textViewRating.text = response?.vote_average.toString()
             binding.imageViewMoviePosture.setOnClickListener {
                 selectedMovie.postValue(response!!)
             }

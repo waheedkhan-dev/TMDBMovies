@@ -65,8 +65,6 @@ class MainActivity : AppCompatActivity() {
                             }
                             Status.SUCCESS -> {
                                 if (!it.data.isNullOrEmpty()) {
-                                    var path = AppConstants.LOAD_BACK_DROP_BASE_URL + it.data[0]!!.poster_path
-                                    Glide.with(this@MainActivity).load(path).into(binding.imageViewCurrent)
                                     upComingMoviesAdapter.submitList(it.data as  ArrayList<TMDBMovies.Results>)
                                 }
                             }
@@ -87,6 +85,8 @@ class MainActivity : AppCompatActivity() {
                         }
                         Status.SUCCESS -> {
                             if (!it.data.isNullOrEmpty()) {
+                                var path = AppConstants.LOAD_BACK_DROP_BASE_URL + it.data.first().poster_path
+                                Glide.with(this@MainActivity).load(path).into(binding.imageViewCurrent)
                                 trendingMoviesAdapter.submitList(it.data as ArrayList<TMDBMovies.Results>)
                                 Log.d(TAG, "Success: ${it.data?.get(0)?.overview}")
                             }

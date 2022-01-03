@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/black_custom"
     tools:context=".ui.activities.MainActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -24,8 +24,9 @@
                 android:id="@+id/imageViewCurrent"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
+                android:scaleType="center"
+                android:adjustViewBounds="true"
                 android:src="@drawable/panda_3"
-                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -38,36 +39,49 @@
                 android:layout_height="450dp"
                 android:background="@drawable/main_background"
                 app:layout_constraintEnd_toEndOf="@+id/imageViewCurrent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
             </View>
+
             <TextView
                 android:id="@+id/textViewAppName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="TMDBMovies"
-                android:visibility="invisible"
-                android:textStyle="bold"
+                android:text="TMDB Movies"
+                android:textColor="@color/white"
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
             </TextView>
+            <View
+                android:id="@+id/trendingView"
+                android:layout_width="4dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="12dp"
+                android:background="@color/app_primary_color"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewTrending"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewTrending">
+
+            </View>
 
             <TextView
                 android:id="@+id/textViewTrending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/trending"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/trendingView"
                 app:layout_constraintTop_toBottomOf="@+id/view">
 
             </TextView>
@@ -85,16 +99,29 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
+            <View
+                android:id="@+id/topRatedView"
+                android:layout_width="4dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="12dp"
+                android:background="@color/app_primary_color"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewTopRated"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewTopRated">
+
+            </View>
+
             <TextView
                 android:id="@+id/textViewTopRated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/top_rated"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/topRatedView"
                 app:layout_constraintTop_toBottomOf="@+id/trendingNowRecyclerView">
 
             </TextView>
@@ -111,16 +138,29 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
+            <View
+                android:id="@+id/upComingView"
+                android:layout_width="4dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="12dp"
+                android:background="@color/app_primary_color"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewUpComing"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewUpComing">
+
+            </View>
+
             <TextView
                 android:id="@+id/textViewUpComing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/up_coming"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/upComingView"
                 app:layout_constraintTop_toBottomOf="@+id/topRatedRecyclerView">
 
             </TextView>
@@ -135,6 +175,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewUpComing">
 
             </androidx.recyclerview.widget.RecyclerView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="309dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
