@@ -94,6 +94,8 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.8.9'
 
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1'
+
 }
 
 kapt {

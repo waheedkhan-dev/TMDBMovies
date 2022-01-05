@@ -2,9 +2,11 @@ package com.codecollapse.tmdbmovies.models.repositories
 
 import android.util.Log
 import com.codecollapse.tmdbmovies.common.AppConstants
+import com.codecollapse.tmdbmovies.models.datamodels.MovieCredits
 import com.codecollapse.tmdbmovies.models.datamodels.MovieDetail
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 import com.codecollapse.tmdbmovies.models.datasources.api.TMDBApi
+import com.codecollapse.tmdbmovies.models.datasources.local.dao.MovieCastDao
 import com.codecollapse.tmdbmovies.models.datasources.local.dao.MovieDao
 import com.codecollapse.tmdbmovies.models.datasources.local.dao.MovieDetailDao
 import com.codecollapse.tmdbmovies.models.datasources.utils.Resource
@@ -17,7 +19,8 @@ import javax.inject.Inject
 class StartUpRepository @Inject constructor(
     private var movieDao: MovieDao,
     private var tmdbApi: TMDBApi,
-    private var movieDetailDao: MovieDetailDao
+    private var movieDetailDao: MovieDetailDao,
+    private var movieCastDao: MovieCastDao
 ) {
     companion object {
         private const val TAG = "StartUpRepository"
@@ -107,6 +110,31 @@ class StartUpRepository @Inject constructor(
                         Log.d(TAG, "getMovieDetails: ${it.body()!!}")
                         movieDetailDao.insertMovie(it.body()!!)
                         emit(Resource.success(movieDetailDao.getTMDBMovieById(movieId)))
+                    } else {
+                        emit(Resource.error("something went wrong", data = null))
+                    }
+                }
+            }catch (ex : Exception){
+                Log.d(TAG, "getMovieDetails: ${ex.message}")
+                emit(Resource.error("something went wrong", data = null))
+            }
+
+        }.flowOn(IO)
+    }
+
+
+    fun getMovieCredits(movieId: Int, movieLanguage: String): Flow<Resource<List<MovieCredits.MovieCast>>> {
+        return flow {
+            try {
+                emit(Resource.success(movieCastDao.getMovieCast(movieId)))
+                tmdbApi.getMovieCredits(movieId,AppConstants.API_KEY, movieLanguage).let {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "getMovieDetails: ${it.body()!!}")
+                        it.body()!!.cast.forEach { movieCast ->
+                            movieCast.movieId = movieId
+                            movieCastDao.insertMovieCast(movieCast)
+                        }
+                        emit(Resource.success(movieCastDao.getMovieCast(movieId)))
                     } else {
                         emit(Resource.error("something went wrong", data = null))
                     }

@@ -2,6 +2,7 @@ package com.codecollapse.tmdbmovies.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,25 +14,38 @@ import com.codecollapse.tmdbmovies.R
 import com.codecollapse.tmdbmovies.common.AppConstants
 import com.codecollapse.tmdbmovies.databinding.ActivityDetailBinding
 import com.codecollapse.tmdbmovies.databinding.ActivityMainBinding
+import com.codecollapse.tmdbmovies.models.adapter.MovieCastAdapter
 import com.codecollapse.tmdbmovies.models.adapter.MoviesGenresAdapter
 import com.codecollapse.tmdbmovies.models.adapter.TrendingMoviesAdapter
 import com.codecollapse.tmdbmovies.models.datasources.utils.Status
 import com.codecollapse.tmdbmovies.ui.viewmodel.StartupViewModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.header_layout.*
 import kotlinx.coroutines.launch
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+
+import androidx.annotation.NonNull
+
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+
+
+
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var moviesGenresAdapter: MoviesGenresAdapter
+    private lateinit var movieCastAdapter: MovieCastAdapter
+    private lateinit var youTubePlayerView: YouTubePlayerView
     private val startupViewModel : StartupViewModel by viewModels()
     private var movieId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        youTubePlayerView = YouTubePlayerView(this)
         if(intent.hasExtra("movieId")){
             movieId = intent.getIntExtra("movieId",0)
 
@@ -40,6 +54,13 @@ class DetailActivity : AppCompatActivity() {
                 recyclerView.layoutManager =
                     GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false)
                 recyclerView.adapter = moviesGenresAdapter
+            }
+
+            binding.castRecyclerView.let { recyclerView ->
+                movieCastAdapter = MovieCastAdapter(this)
+                recyclerView.layoutManager =
+                    GridLayoutManager(this, 1, LinearLayoutManager.HORIZONTAL, false)
+                recyclerView.adapter = movieCastAdapter
             }
 
             movieId.let {
@@ -68,9 +89,35 @@ class DetailActivity : AppCompatActivity() {
                                 Status.ERROR->{}
                             }
                         }
+
+                        startupViewModel.getMovieCredits(movieId,"en").collect{
+                            when(it.status){
+                                Status.LOADING->{}
+                                Status.SUCCESS->{
+                                    if (!it.data!!.isNullOrEmpty()){
+                                        movieCastAdapter.submitList(it.data)
+                                    }
+                                }
+                                Status.ERROR->{}
+                            }
+                        }
                     }
                 }
             }
+
+          /*  binding.imageViewPosture.setOnClickListener {
+                binding.youtubeLayout.root.visibility = View.VISIBLE
+
+                lifecycle.addObserver( binding.youtubeLayout.youtubePlayer)
+                binding.youtubeLayout.youtubePlayer.addYouTubePlayerListener(object :
+                    AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        val videoId = "S0Q4gqBUs7c"
+                        youTubePlayer.loadVideo(videoId, 0f)
+                        youTubePlayer.play()
+                    }
+                })
+            }*/
         }
 
         imageViewBack.setOnClickListener { finish() }

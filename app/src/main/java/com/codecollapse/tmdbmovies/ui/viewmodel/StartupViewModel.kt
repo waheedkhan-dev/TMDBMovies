@@ -1,6 +1,7 @@
 package com.codecollapse.tmdbmovies.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.codecollapse.tmdbmovies.models.datamodels.MovieCredits
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 import com.codecollapse.tmdbmovies.models.datasources.utils.Resource
 import com.codecollapse.tmdbmovies.models.repositories.StartUpRepository
@@ -23,4 +24,7 @@ class StartupViewModel @Inject constructor(private var startUpRepository: StartU
 
     fun getUpComingMovies() : Flow<Resource<List<TMDBMovies.Results>>> =
         startUpRepository.getUpComingMovies()
+
+    fun getMovieCredits(movieId: Int,movieLanguage: String) : Flow<Resource<List<MovieCredits.MovieCast>>> =
+        startUpRepository.getMovieCredits(movieId,movieLanguage)
 }

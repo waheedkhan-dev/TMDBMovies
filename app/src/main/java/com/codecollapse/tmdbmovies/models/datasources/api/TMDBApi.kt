@@ -1,5 +1,6 @@
 package com.codecollapse.tmdbmovies.models.datasources.api
 
+import com.codecollapse.tmdbmovies.models.datamodels.MovieCredits
 import com.codecollapse.tmdbmovies.models.datamodels.MovieDetail
 import com.codecollapse.tmdbmovies.models.datamodels.TMDBMovies
 import retrofit2.Response
@@ -26,10 +27,10 @@ interface TMDBApi {
         @Query("append_to_response") videos : String
     ): Response<MovieDetail>
 
-    /*@GET("movie/{movie_id}/credits")
+    @GET("movie/{movie_id}/credits")
     suspend fun getMovieCredits(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ) : Response<MovieCredits>*/
+    ) : Response<MovieCredits>
 }

@@ -2,6 +2,7 @@ package com.codecollapse.tmdbmovies.di.modules
 
 import android.content.Context
 import androidx.room.Room
+import com.codecollapse.tmdbmovies.models.datasources.local.dao.MovieCastDao
 import com.codecollapse.tmdbmovies.models.datasources.local.dao.MovieDao
 import com.codecollapse.tmdbmovies.models.datasources.local.dao.MovieDetailDao
 import com.codecollapse.tmdbmovies.models.datasources.local.database.TMDBDatabase
@@ -37,5 +38,11 @@ class DatabaseModule {
     @Provides
     fun provideMovieDetailDao(appDatabase: TMDBDatabase): MovieDetailDao {
         return appDatabase.movieDetailDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMovieCastDao(appDatabase: TMDBDatabase): MovieCastDao {
+        return appDatabase.movieCastDao()
     }
 }
