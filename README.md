@@ -15,3 +15,11 @@ The purpose of this application is to promot MAD skill,Clean architecture and sh
 10) Room Database
 11) Material Design
  
+# Screen Shoots
+
+<div align="center">
+   <a target="_blank" rel="noopener noreferrer" href="">
+     <img src="https://user-images.githubusercontent.com/55230825/140015015-e3785fe2-d349-488f-9577-0f7be4df833e.jpg" width="330" style="max-width: 100%;"></a>
+   <a target="_blank" rel="noopener noreferrer" href="">
+     <img src="https://user-images.githubusercontent.com/55230825/140122633-453698a2-dcb0-40f4-a0ff-fc3adff4c92c.jpg" width="330" style="max-width: 100%;"></a>
+  </div>
