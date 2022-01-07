@@ -70,8 +70,8 @@ class DetailActivity : AppCompatActivity() {
                             when(it.status){
                                 Status.LOADING->{}
                                 Status.SUCCESS->{
-                                    var movieDetail = it.data
-                                    if(movieDetail!=null){
+                                    if(it.data!=null){
+                                        var movieDetail = it.data
                                         var path = AppConstants.LOAD_BACK_DROP_BASE_URL + movieDetail!!.backdrop_path
                                         Glide.with(this@DetailActivity).load(path).into(binding.imageViewPosture)
                                         binding.textViewMovieName.text = movieDetail.original_title
